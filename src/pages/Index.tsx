@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Hero from "@/components/Hero";
 import Dashboard from "@/components/Dashboard";
+import LinkedInManager from "@/components/LinkedInManager";
 import Profile from "@/components/Profile";
 import Navigation from "@/components/Navigation";
 
@@ -13,6 +14,8 @@ const Index = () => {
         return <Hero />;
       case "dashboard":
         return <Dashboard />;
+      case "linkedin":
+        return <LinkedInManager />;
       case "profile":
         return <Profile />;
       case "settings":

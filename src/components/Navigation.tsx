@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Bell, User, Settings, Home } from "lucide-react";
+import { Brain, Bell, User, Settings, Home, Linkedin } from "lucide-react";
 import { useState } from "react";
 
 const Navigation = ({ activeSection, onSectionChange }: { 
@@ -12,6 +12,7 @@ const Navigation = ({ activeSection, onSectionChange }: {
   const navItems = [
     { id: 'hero', label: 'Home', icon: Home },
     { id: 'dashboard', label: 'Dashboard', icon: Brain },
+    { id: 'linkedin', label: 'LinkedIn Profiles', icon: Linkedin },
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];

@@ -2,8 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Bell, BellRing, Building2, Clock, MapPin, Star, TrendingUp, Users } from "lucide-react";
-import { useState } from "react";
+import { Bell, BellRing, Building2, Clock, MapPin, Star, TrendingUp, Users, Linkedin, Brain } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface Internship {
   id: string;
@@ -26,7 +26,7 @@ const mockInternships: Internship[] = [
     location: "Mountain View, CA",
     matchPercentage: 95,
     requirements: ["Product Strategy", "Data Analysis", "User Research"],
-    description: "Join Google's Product team to work on consumer-facing products used by billions of users worldwide.",
+    description: "Join Google's Product team to work on consumer-facing products used by billions of users worldwide. Perfect match based on Sarah's LinkedIn profile analysis.",
     duration: "12 weeks",
     isNew: true,
     logo: "🏢"
@@ -58,11 +58,20 @@ const mockInternships: Internship[] = [
 ];
 
 const Dashboard = () => {
+  const [linkedInProfiles, setLinkedInProfiles] = useState([]);
   const [notifications] = useState([
-    { id: 1, message: "New PM internship at Google matches your profile!", isNew: true },
-    { id: 2, message: "Microsoft updated their internship requirements", isNew: true },
-    { id: 3, message: "Application deadline reminder: Airbnb PM Intern", isNew: false }
+    { id: 1, message: "AI analyzed Sarah's LinkedIn: 95% match with Google PM role!", isNew: true },
+    { id: 2, message: "New PM internship at Microsoft matches Alex's profile", isNew: true },
+    { id: 3, message: "LinkedIn skill analysis complete - 3 new recommendations", isNew: false }
   ]);
+
+  useEffect(() => {
+    // Load LinkedIn profiles for analysis
+    const savedProfiles = localStorage.getItem('linkedinProfiles');
+    if (savedProfiles) {
+      setLinkedInProfiles(JSON.parse(savedProfiles));
+    }
+  }, []);
 
   const getMatchColor = (percentage: number) => {
     if (percentage >= 90) return "bg-accent text-accent-foreground";
@@ -164,6 +173,58 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* LinkedIn Analysis Summary */}
+        {linkedInProfiles.length > 0 && (
+          <Card className="bg-gradient-card shadow-card hover:shadow-hover transition-all duration-300 mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Linkedin className="w-5 h-5 text-primary" />
+                LinkedIn Profile Analysis Summary
+                <Badge variant="secondary" className="ml-auto">
+                  {linkedInProfiles.length} Profile{linkedInProfiles.length !== 1 ? 's' : ''}
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {linkedInProfiles.slice(0, 3).map((profile: any, index: number) => (
+                  <div key={profile.id || index} className="p-4 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                        <Linkedin className="w-4 h-4 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{profile.name}</p>
+                        <p className="text-xs text-muted-foreground">{profile.headline?.slice(0, 30)}...</p>
+                      </div>
+                    </div>
+                    {profile.aiAnalysis && (
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">AI Match Score</span>
+                          <Badge className={getMatchColor(profile.aiAnalysis.suitabilityScore)}>
+                            {profile.aiAnalysis.suitabilityScore}%
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Brain className="w-3 h-3 text-primary" />
+                          <span className="text-xs text-muted-foreground">
+                            {profile.aiAnalysis.matchedInternships?.length || 0} matches found
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <Button variant="outline" size="sm" className="w-full mt-4">
+                <Linkedin className="w-4 h-4 mr-2" />
+                View All LinkedIn Profiles
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Recommended Internships */}
         <div className="space-y-6">
