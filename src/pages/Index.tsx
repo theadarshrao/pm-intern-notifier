@@ -1,12 +1,38 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import Hero from "@/components/Hero";
+import Dashboard from "@/components/Dashboard";
+import Profile from "@/components/Profile";
+import Navigation from "@/components/Navigation";
 
 const Index = () => {
+  const [activeSection, setActiveSection] = useState("hero");
+
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "hero":
+        return <Hero />;
+      case "dashboard":
+        return <Dashboard />;
+      case "profile":
+        return <Profile />;
+      case "settings":
+        return (
+          <div className="min-h-screen bg-background flex items-center justify-center p-6">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-4">Settings</h1>
+              <p className="text-muted-foreground">Notification preferences and account settings coming soon!</p>
+            </div>
+          </div>
+        );
+      default:
+        return <Hero />;
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navigation activeSection={activeSection} onSectionChange={setActiveSection} />
+      {renderActiveSection()}
     </div>
   );
 };
